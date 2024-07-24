@@ -10,10 +10,7 @@ import { LoginProvider } from './services/LoginContext';
 import { EditProductPage } from './pages/EditProduct/EditProductPage';
 import ControlPanelComponent from './components/ControlPanel/ControlPanelComponent';
 
-
-
 const App = () => {
-
   return (
     <> 
     <LoginProvider>

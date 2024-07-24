@@ -1,0 +1,6 @@
+.product-detail-page-container{
+  margin-top: 65px;
+  background-color: #f2f2f2;
+  padding: 2em;
+  height: calc(100vh - 65px);
+}

@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { firestore } from "../components/Firebase/FirebaseConfig";
 import { ProductData } from "../models/productData.model";
 
@@ -7,7 +7,8 @@ export const fetchProductsCollectionData = async () => {
     const ProductsCollectionRef = collection(firestore, "productos");
 
     try {
-        const querySnapshot = await getDocs(ProductsCollectionRef);
+        const q = query(ProductsCollectionRef, where("onDestroy", "==", false));
+        const querySnapshot = await getDocs(q);
         const data: ProductData[] = [];
 
         querySnapshot.forEach((doc: any) => {
@@ -49,6 +50,19 @@ export const saveProduct = async (product: ProductData, id: string): Promise<voi
     } catch (error) {
       console.error('Error saving product:', error);
       throw new Error('Error saving product');
+    }
+};
+
+export const deleteProduct = async (id: string): Promise<void> => {
+    try {
+      const productRef = doc(firestore, 'productos', id);
+  
+      await updateDoc(productRef, { onDestroy: true });
+  
+      console.log('Product deleted successfully');
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      throw new Error('Error deleting product');
     }
 };
 

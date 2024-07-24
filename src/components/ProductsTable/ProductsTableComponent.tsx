@@ -27,9 +27,10 @@ const ProductsTableComponent : FC<ProductstableProps> = ({products}) => {
               <th className="display-none-col">ID</th>
               <th>Mark</th>
               <th>Model</th>
-              <th className="display-none-col">Description</th>
-              <th >Price</th>
               <th>Year</th>
+              <th className="display-none-col">Description</th>
+              <th className="display-none-col">Reservado</th>
+              <th >Price</th>
               <th className="display-none-col">Type</th>
             </tr>
           </thead>
@@ -39,9 +40,10 @@ const ProductsTableComponent : FC<ProductstableProps> = ({products}) => {
                 <td className="display-none-col">{product.id}</td>
                 <td>{product.make}</td>
                 <td>{product.model}</td>
-                <td className="display-none-col">{ TruncateStringFn(product.description, 15) }</td>
-                <td>{product.price}</td>
                 <td>{product.year}</td>
+                <td className="display-none-col">{ TruncateStringFn(product.description, 15) }</td>
+                <td>{product.booking ? 'Si' : 'No'}</td>
+                <td >{product.price}</td>
                 <td className="display-none-col">{product.type}</td>
               </tr>
             ))}

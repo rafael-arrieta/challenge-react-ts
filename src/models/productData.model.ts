@@ -7,4 +7,6 @@ export interface ProductData {
     year: number;
     type: string;
     images: string[];
+    booking: boolean;
+    onDestroy: boolean;
 }

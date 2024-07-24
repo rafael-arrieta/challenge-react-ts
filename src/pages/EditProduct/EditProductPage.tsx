@@ -1,13 +1,15 @@
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getProductById, saveProduct, createProduct } from '../../services/fetchProducts.service';
+import { getProductById, saveProduct, createProduct, deleteProduct } from '../../services/fetchProducts.service';
 import { ProductData } from '../../models/productData.model';
 import { Container, Form, Button } from 'react-bootstrap';
 import { FaChevronLeft } from 'react-icons/fa';
 import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import './EditProductPage.css';
+import { FaDeleteLeft } from 'react-icons/fa6';
+import ConfirmationModalComponent from '../../components/ConfirmationModalComponent/ConfirmationModalComponent';
 
 const validationSchema = Yup.object({
     make: Yup.string().required('La marca es requerida'),
@@ -15,7 +17,7 @@ const validationSchema = Yup.object({
     description: Yup.string().required('La descripción es requerida'),
     doors: Yup.string().required('La cantidad de puertas es requerida'),
     price: Yup.number().required('El precio es requerido').positive('El precio debe ser positivo'),
-    year: Yup.number().required('El año es requerido').integer('El año debe ser entero').min(1960, 'El año debe ser mayor a 1960').max(2022, 'El año debe ser menor a 2024'),
+    year: Yup.number().required('El año es requerido').integer('El año debe ser entero').min(1960, 'El año debe ser mayor a 1960').max(2024, 'El año debe ser menor a 2024'),
     type: Yup.string().required('El tipo es requerido'),
     images: Yup.array()
 });
@@ -25,6 +27,7 @@ export const EditProductPage: React.FC = () => {
     const [initialValues, setInitialValues] = useState<ProductData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -64,6 +67,23 @@ export const EditProductPage: React.FC = () => {
         }
     };
 
+    const handleDelete = () => {
+      setShowModal(true)
+    };
+
+    
+    const handleConfirmDelete = async () => {
+      try {
+          
+          setShowModal(false)
+          
+          await deleteProduct(id as string);
+          navigate('/control-panel');
+      } catch (err) {
+          setError('Error deleting product');
+      }
+  };
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
   
@@ -71,9 +91,14 @@ export const EditProductPage: React.FC = () => {
         <Container className="edit-product-container">
         <div className="edit-product-header">
           <h2>{id ? 'Edit Product' : 'New Product'}</h2>
-          <Button variant="light" onClick={() => navigate('/control-panel')}>
-            <FaChevronLeft /> Volver
-          </Button>
+          <div>
+            <Button variant="light" onClick={() => navigate('/control-panel')}>
+              <FaChevronLeft /> Volver
+            </Button>
+            {id && <Button variant="danger" onClick={handleDelete}>
+              <FaDeleteLeft /> Eliminar
+            </Button>}
+          </div>
         </div>
         <Formik
             initialValues = { initialValues || {
@@ -85,6 +110,8 @@ export const EditProductPage: React.FC = () => {
                 doors: 3,
                 year: new Date().getFullYear(),
                 type: '',
+                onDestroy: false,
+                booking: false,
                 images: [],
             }}
             validationSchema={validationSchema}
@@ -184,9 +211,18 @@ export const EditProductPage: React.FC = () => {
               <Button variant="primary" type="submit">
                 {id ? 'Update Product' : 'Add Product'}
               </Button>
+
             </FormikForm>
           )}
         </Formik>
+        {initialValues && showModal &&(
+                <ConfirmationModalComponent
+                    show={showModal}
+                    onHide={() => setShowModal(false)}
+                    onConfirm={handleConfirmDelete}
+                    productMake={initialValues.make} // o usa el nombre del producto si está disponible
+                />
+          )}
       </Container>
     );
   };

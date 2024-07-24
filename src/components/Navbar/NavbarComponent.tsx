@@ -5,14 +5,17 @@ import { useState } from 'react';
 import { useLoginContext } from '../../services/LoginContext';
 
 const NavbarComponent = () => {
-
-  const { getUserData } = useLoginContext();
+  const { updateUserData, getUserData } = useLoginContext();
   const userData = getUserData();
 
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidenav = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleLogout = () => {
+    updateUserData('', '', '', false);
   };
 
   return (
@@ -28,11 +31,14 @@ const NavbarComponent = () => {
           
           {userData?.isAdmin ?
             <NavLink to="/control-panel" className="nav-link" onClick={toggleSidenav}>Panel de control</NavLink> :
-            <NavLink to="/favorites" className="nav-link" onClick={toggleSidenav}>Favorites</NavLink>
+            <NavLink to={userData.id ? '/favorites' : '/login'} className="nav-link" onClick={toggleSidenav}>Mis Favoritos</NavLink>
           }
-          <NavLink to="/login" className="nav-link" onClick={toggleSidenav}>
-            {userData.id ? 'Logout' : 'Login'}
-          </NavLink>
+          { !userData.id ? 
+            <NavLink to="/login" className="nav-link" onClick={toggleSidenav}>
+              Login
+            </NavLink>:
+            <p onClick={handleLogout} className="nav-link" style={{paddingTop: '16px', cursor: 'pointer'}}>Cerrar Sesion</p>
+          }
         </div>
     </nav>
   )
