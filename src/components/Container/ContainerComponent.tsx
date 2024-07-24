@@ -1,11 +1,11 @@
-import NavbarComponent from "../Navbar/navbar.component"
+import NavbarComponent from "../Navbar/NavbarComponent"
 
 
 const ContainerComponent = () => {
   return (
-    <div className="container">
+    <>
         <NavbarComponent></NavbarComponent>
-    </div>
+    </>
   )
 }
 
