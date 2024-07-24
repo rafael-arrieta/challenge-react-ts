@@ -1,0 +1,12 @@
+.display-none-col{
+    display: none;
+    background-color: aquamarine;
+}
+
+
+@media (min-width: 800px) {
+    .display-none-col{
+        display: table-cell;
+        background-color: aquamarine;
+    }
+}

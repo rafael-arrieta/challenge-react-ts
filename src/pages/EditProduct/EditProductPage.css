@@ -1,0 +1,25 @@
+.edit-product-container{
+
+    display: flex;
+    
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    margin-top:65px;
+    padding: 0.5em;
+    height: calc(100vh - 65px);
+    background-color: #f2f2f2;
+}
+
+.edit-product-header{
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    width: 100%;
+    justify-content: space-between;
+}
+.edit-product-header h2{
+
+    text-align: center;
+}
+

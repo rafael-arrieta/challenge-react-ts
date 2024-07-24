@@ -31,7 +31,7 @@ const NavbarComponent = () => {
             <NavLink to="/favorites" className="nav-link" onClick={toggleSidenav}>Favorites</NavLink>
           }
           <NavLink to="/login" className="nav-link" onClick={toggleSidenav}>
-            {userData ? 'Logout' : 'Login'}
+            {userData.id ? 'Logout' : 'Login'}
           </NavLink>
         </div>
     </nav>

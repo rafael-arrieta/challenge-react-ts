@@ -1,0 +1,21 @@
+.control-panel-container{
+    margin-top: 65px;
+    background-color: #f2f2f2;
+    padding: 0.5em;
+    height: calc(100vh - 65px);
+}
+
+.control-panel-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+
+@media screen and (min-width: 800px) {
+    .control-panel-container{
+        padding: 2em;
+    }
+}
