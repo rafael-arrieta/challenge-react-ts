@@ -1,5 +1,4 @@
-export interface ProductData {
-    id: string;
+export interface NewProduct {
     make: string;
     model: string;
     description: string;
@@ -9,8 +8,4 @@ export interface ProductData {
     images: string[];
     booking: boolean;
     onDestroy: boolean;
-    bookingData?: {
-        user: string;
-        amount: number;
-    };
 }

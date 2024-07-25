@@ -10,6 +10,7 @@ import * as Yup from 'yup';
 import './EditProductPage.css';
 import { FaDeleteLeft } from 'react-icons/fa6';
 import ConfirmationModalComponent from '../../components/ConfirmationModalComponent/ConfirmationModalComponent';
+import { NewProduct } from '../../models/newProduct';
 
 const validationSchema = Yup.object({
     make: Yup.string().required('La marca es requerida'),
@@ -24,7 +25,7 @@ const validationSchema = Yup.object({
   
 export const EditProductPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const [initialValues, setInitialValues] = useState<ProductData | null>(null);
+    const [initialValues, setInitialValues] = useState <NewProduct | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
@@ -50,7 +51,7 @@ export const EditProductPage: React.FC = () => {
         fetchProduct();
     }, [id]);
 
-    const handleSubmit = async (values: ProductData) => {
+    const handleSubmit = async (values: NewProduct) => {
         try {
             if(id){
                 await saveProduct(values, id);
@@ -102,7 +103,6 @@ export const EditProductPage: React.FC = () => {
         </div>
         <Formik
             initialValues = { initialValues || {
-                id: '',
                 make: '',
                 model: '',
                 description: '',

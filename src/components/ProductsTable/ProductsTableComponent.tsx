@@ -1,7 +1,7 @@
 import { FC } from "react"
 import { ProductData } from "../../models/productData.model"
 import { Table } from "react-bootstrap"
-import { TruncateStringFn } from "../../functions/TrucateString/TruncateStringFn"
+import { TruncateStringFn } from "../../functions/TruncateStringFn"
 import './ProductsTableComponent.css'
 import { useNavigate } from "react-router-dom"
 
