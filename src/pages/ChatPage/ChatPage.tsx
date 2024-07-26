@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useLoginContext } from "../../services/LoginContext";
-import { useEffect, useRef, useState } from "react";
-import { Message } from "../../models/Message.model";
-import { fetchMessagesByUserId } from "../../services/fetchMessages.service";
+import { useEffect, useState } from "react";
+import { Chat, Message, PartialMessage } from "../../models/Message.model";
+import { createMessage, fetchMessageCollectionData, fetchMessagesByUserId, updateMessage } from "../../services/fetchMessages.service";
 
 import './ChatPage.css';
 import { Button } from "react-bootstrap";
+import { getProductById } from "../../services/fetchProducts.service";
 
 const ChatPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -14,76 +15,120 @@ const ChatPage = () => {
 
     const [chats, setChats] = useState<Message[]>([]);
     const [currentChat, setCurrentChat] = useState<Message>({} as Message);
-
-    const messagesEndRef = useRef<HTMLDivElement | null>(null);
-
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
-
-    const messages = [
-        'message 1',
-        'message 2',
-        'message 3',
-        'message 4',
-        'message 5',
-        'message 6',
-        'message 7',
-        'message 8',
-        'message 9',
-        'message 10',
-        'message 11',
-        'message 12',
-        'message 13',
-        'message 14',
-    ]
+    const [inputText, setInputText] = useState<string>('');
 
     useEffect(() => {
-        // TODO: traer chats del usuario
-        // Si hay un id, traer o crear el char por la unidad
-
-        const fetchChats = async () => {
-            try {
-                const chats = await fetchMessagesByUserId(userData.id);
+        /* TODO: 
+            Traer chats del usuario
+            Si hay un id, traer o crear el char por la unidad
+            
+        */
+        if(userData.isAdmin){
+            fetchMessageCollectionData().then(chats => {
+                if(!chats) return;
                 setChats(chats);
-                const current = chats.find(chat => chat.id === id);
+                const current = chats.find(chat => chat.productId === id);
+                
+                if (current) {
+                    setCurrentChat(current);
+                }else{
+                    setCurrentChat({} as Message);
+                }
+            })
+
+        }else{
+            fetchMessagesByUserId(userData.id).then(chats => {
+                setChats(chats);
+                const current = chats.find(chat => chat.productId === id);
                 if (current) {
                     console.log(current);
+                    
                     setCurrentChat(current);
+                }else{
+                    setCurrentChat({} as Message);
+
+                    id && getProductById(id).then(product => {
+                        product && 
+                        setInputText(`Hola, me puedes ayudar con ${product.make}, modelo ${product.model}, año ${product.year}, id "${id}"?`);
+                    });
                 }
+                });
+        }
+    }, [])
 
-            } catch (error) {
-                console.error('Error fetching chats:', error);
+    const sendMassage = async () => {
+        try{
+            if(currentChat.id){
+                console.log(currentChat.messages);
+
+                const messages: Chat[] = [...currentChat.messages, {
+                    userName: userData.name,
+                    text: inputText,
+                    date: new Date(),
+                    isResponse: 'user'
+                }];
+                if(id){
+                    const chat:PartialMessage = {
+                        userId : userData.id,
+                        productId: id,
+                        messages: messages,
+                        readed: false
+                    }
+
+                await updateMessage(chat, currentChat.id);
+                }
+            }else{
+                if(id){
+                    const newChat:PartialMessage = {
+                        userId : userData.id,
+                        productId: id,
+                        messages: [
+                            {
+                                userName: userData.name,
+                                text: inputText,
+                                date: new Date(),
+                                isResponse: 'user'
+                            }
+                        ],
+                        readed: false
+                    }
+                    await createMessage(newChat);
+
+                }
             }
-        };
-
-
-
-        
-        fetchChats();
-
-    }, [userData])
+            setInputText('');
+        }catch(error){
+            console.error(error);
+        }
+    }
 
   return (
     <div className="chat-page-container">
         <div className="chat-list-sidenav">
-            {// TODO: mostrar listado de chats
-
+            {chats.map((chat, index) => (
+                <li key={index} onClick={() => setCurrentChat(chat)}>{chat.productId}</li>
+                ))
             }
         </div>
         <div className="chat-container">
                 <div className="chat-messages">
-                    {messages.map((message, index) => (
+                    {currentChat.id && currentChat.messages.map((message, index) => (
                         <div key={index} className="message">
-                            {message}
+                            <strong>{message.isResponse}: {message.userName}</strong>
+                            <p>{message.text}</p>
                         </div>
                     ))}
-                    <div ref={messagesEndRef} />
                 </div>
-                <div className="chat-input-container">
-                    <input type="text" placeholder="Escribe un mensaje..." />
-                    <Button type="button">Enviar</Button>
-                </div>
+
+                
+                <form className="chat-input-container">
+                    <input 
+                        type="text" 
+                        placeholder="Escribí tu mensaje..." 
+                        value={inputText}
+                        onChange={e => setInputText(e.target.value)} />
+                    <Button type="button" variant="primary" onClick={ () => sendMassage()}>Enviar</Button>
+                </form>
         </div>
     </div>
   )

@@ -45,7 +45,7 @@
 }
 
 .message {
-    min-height: 300px;
+    min-height: 80px;
     padding: 10px;
     border-bottom: 1px solid #ddd;
 }

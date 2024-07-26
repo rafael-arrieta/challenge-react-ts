@@ -82,10 +82,7 @@ export const getProductById = async (id: string): Promise<ProductData | null> =>
 export const saveProduct = async (product: NewProduct, id: string): Promise<void> => {
     try {
       const productRef = doc(firestore, 'productos', id);
-
       await setDoc(productRef, product);
-  
-      console.log('Product saved successfully');
     } catch (error) {
       console.error('Error saving product:', error);
       throw new Error('Error saving product');

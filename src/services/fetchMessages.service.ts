@@ -1,6 +1,6 @@
-import { addDoc, collection, deleteDoc, doc, getDocs, limit, query, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, limit, query, setDoc, where } from "firebase/firestore";
 import { firestore } from "../components/Firebase/FirebaseConfig";
-import { Message } from "../models/Message.model";
+import { Message, PartialMessage } from "../models/Message.model";
 
 
 export const fetchMessagesByUserId = async (userId: string): Promise<Message[]> => {
@@ -20,6 +20,25 @@ export const fetchMessagesByUserId = async (userId: string): Promise<Message[]> 
     } catch (error) {
         console.error("Error fetching messages by userId:", error);
         throw new Error("Error fetching messages by userId");
+    }
+};
+
+export const fetchMessageCollectionData = async () => {
+    const MessageCollectionRef = collection(firestore, "productos");
+
+    try {
+        const q = query(MessageCollectionRef, where("onDestroy", "==", false));
+        const querySnapshot = await getDocs(q);
+        const data: Message[] = [];
+
+        querySnapshot.forEach((doc: any) => {
+            const documentData = doc.data();
+            data.push({ ...documentData, id: doc.id });
+        });
+
+        return data;
+    } catch (error) {
+        console.error("Error fetching Message collection data:", error);
     }
 };
 
@@ -43,13 +62,24 @@ export const fetchMessageByProductId = async (productId: string): Promise<Messag
     }
 };
 
-export const createMessage = async (productId: string, userId: string): Promise<void> => {
+export const createMessage = async (message: PartialMessage): Promise<void> => {
     try {
         const messagesCollectionRef = collection(firestore, 'messages');
-        await addDoc(messagesCollectionRef, { productId, userId });
+        await addDoc(messagesCollectionRef, message);
+
     } catch (error) {
         console.error('Error creating message:', error);
         throw new Error('Error creating message');
+    }
+};
+
+export const updateMessage = async (message: PartialMessage, id: string): Promise<void> => {
+    try {
+      const messageRef = doc(firestore, 'messages', id);
+      await setDoc(messageRef, message);
+    } catch (error) {
+      console.error('Error saving message:', error);
+      throw new Error('Error saving message');
     }
 };
 
