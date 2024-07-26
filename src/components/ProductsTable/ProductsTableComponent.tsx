@@ -42,7 +42,11 @@ const ProductsTableComponent : FC<ProductstableProps> = ({products}) => {
                 <td>{product.model}</td>
                 <td>{product.year}</td>
                 <td className="display-none-col">{ TruncateStringFn(product.description, 15) }</td>
-                <td>{product.booking ? 'Si' : 'No'}</td>
+                <td>{product.booking ? 
+                  <span style={{color: 'green'}}>Reservado: {product.bookingData?.amount}</span> :
+                  <span style={{color: 'red'}}>Disponible</span>
+                  }
+                </td>
                 <td >{product.price}</td>
                 <td className="display-none-col">{product.type}</td>
               </tr>

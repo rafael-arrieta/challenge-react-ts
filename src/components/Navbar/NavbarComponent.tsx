@@ -30,7 +30,10 @@ const NavbarComponent = () => {
           <NavLink to="/" className="nav-link" onClick={toggleSidenav}>Home</NavLink>
           
           {userData?.isAdmin ?
-            <NavLink to="/control-panel" className="nav-link" onClick={toggleSidenav}>Panel de control</NavLink> :
+            <>
+              <NavLink to="/control-panel" className="nav-link" onClick={toggleSidenav}>Panel de control</NavLink>
+              <NavLink to={userData.id ? '/messages' : '/login'} className="nav-link" onClick={toggleSidenav}>Mensajes</NavLink>
+            </> :
             <>
               <NavLink to={userData.id ? '/favorites' : '/login'} className="nav-link" onClick={toggleSidenav}>Mis Favoritos</NavLink>
               <NavLink to={userData.id ? '/messages' : '/login'} className="nav-link" onClick={toggleSidenav}>Mensajes</NavLink>

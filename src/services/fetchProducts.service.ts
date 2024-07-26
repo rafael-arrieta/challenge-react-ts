@@ -105,10 +105,8 @@ export const deleteProduct = async (id: string): Promise<void> => {
 export const bookingProduct = async (id: string, userId: string, amount: number): Promise<void> => {
   try {
     const productRef = doc(firestore, 'productos', id);
+    await updateDoc(productRef, { bookingData: { userId: userId, amount:amount }, booking: true });
 
-    await updateDoc(productRef, { bookingData: { userId: userId, amount:amount } });
-
-    console.log('Product deleted successfully');
   } catch (error) {
     console.error('Error deleting product:', error);
     throw new Error('Error deleting product');

@@ -35,7 +35,7 @@ const ChatPage = () => {
                     const current = chats[0]
                     if (current) {
                         setCurrentChat(current);
-                        setChatId(current.productId)
+                        !chatId && setChatId(current.productId)
                     }
                 }
             })
@@ -102,6 +102,7 @@ const ChatPage = () => {
             }
             setInputText('');
             handleData();
+            setChatId(chatId);
         }catch(error){
             console.error(error);
         }

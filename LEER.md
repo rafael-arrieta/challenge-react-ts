@@ -47,3 +47,12 @@ debe almacenarse en Firestore, donde el usuario tenga la posibilidad de:
     • Backend: Firestore u otra tecnología en la que te sientas más cómodo
     • Biblioteca UI: Material-UI (MUI) o React Bootstrap para la interfaz de usuario
     • Estilo: CSS (opcional, también puedes usar MUI SX, SASS)
+
+* En el flujo la aplicacion trae los productos desde Firebase 
+* hace un login sinó no permite al usuario ejecutar ciertas acciones
+* en el login se encuentra un button para loguearse como Admin o Usuario final
+* Admin puede acceder al panel de control a editar el producto, crear uno nuevo o hacer un borrado lógico
+* El usuario final puede acceder a la pagina para ver sus favoritos, allí puede ver todos o eliminarlo
+* El usuario final en la pagina de Product Detail puede hacer la reserva
+* Se implementó un chat sencillo para las comunicaciones entre los operadores y 
+    los usuarios finales con ruta disponible en caso que el usuario esté logueado.

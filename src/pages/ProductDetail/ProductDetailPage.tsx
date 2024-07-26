@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { getProductById } from "../../services/fetchProducts.service";
+import { bookingProduct, getProductById } from "../../services/fetchProducts.service";
 import { useEffect, useState } from "react";
 import { ProductData } from "../../models/productData.model";
 import { CapitalizeFirstLetter } from "../../functions/CapitalizeFirstLetter";
@@ -81,7 +81,10 @@ const ProductDetailPage = () => {
     }
   };
 
-  const handlePayment = () => {
+  const handlePayment = (value: number) => {
+    if (userData?.id && id && userData?.isAdmin === false) {
+      bookingProduct(id, userData.id, value);
+    }
     setShowBookingPanel(false);
   }
 

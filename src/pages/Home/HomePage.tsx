@@ -33,7 +33,7 @@ export const HomePage = () => {
 
       <div className="home-page-cards-container">
         {productsData.map((product: ProductData) => (
-          <ProductCardComponent key={product.id} product={product} />
+          !product.booking && <ProductCardComponent key={product.id} product={product} />
         ))}
       </div>
     </div>
