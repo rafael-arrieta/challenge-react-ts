@@ -10,6 +10,7 @@ import { Button } from "react-bootstrap";
 import { FaHeart } from "react-icons/fa";
 import { createFavorite, deleteFavorite, fetchFavoritesByUserId } from "../../services/fetchFavorites.service";
 import { FavoriteData } from "../../models/favoriteData.model";
+import { BookingProductComponent } from "../../components/BookingProductComponent/BookingProductComponent";
 
 
 const ProductDetailPage = () => {
@@ -20,6 +21,7 @@ const ProductDetailPage = () => {
   const [favoriteError, setFavoriteError ] = useState<string | null>(null);
   const [btnFavorite, setBtnFavorite] = useState('añadir a favoritos');
   const [isFavorite, setIsFavorite] = useState<FavoriteData | null>(null);
+  const [showBookingPanel, setShowBookingPanel] = useState(false);
 
 
   const { getUserData } = useLoginContext();
@@ -79,6 +81,10 @@ const ProductDetailPage = () => {
     }
   };
 
+  const handlePayment = () => {
+    setShowBookingPanel(false);
+  }
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Se produjo un error:{error}</p>;
 
@@ -93,6 +99,7 @@ const ProductDetailPage = () => {
             <h3><strong>Marca: </strong>{CapitalizeFirstLetter(product.make)}</h3>
             <h4><strong>Modelo: </strong>{CapitalizeFirstLetter(product.model)}</h4>
             <h5><strong>Año: </strong> {product.year}</h5>
+            <h5><strong>Tipo: </strong> {product.type}</h5>
             <p>
               <strong>Descripción del producto: </strong> 
               { CapitalizeFirstLetter(product.description)}
@@ -103,12 +110,18 @@ const ProductDetailPage = () => {
                 {
                   userData?.id && 
                   <>
-                    <Button>Reservar</Button>
+                    { showBookingPanel ? 
+                      <Button variant="danger" onClick={ () => setShowBookingPanel(false)}>Cancelar reserva</Button> :
+                      <Button onClick={ () => setShowBookingPanel(true)}>Reservar</Button>
+                    }
                   </>
                 }
                 <Button variant="warning" onClick={handleSaveFavorite}><FaHeart/> {btnFavorite}</Button>
               </div>
               <p className="favorite-error">{favoriteError && favoriteError}</p>
+
+
+              { showBookingPanel && <BookingProductComponent onSubmit={handlePayment} totalValue={product.price}/> }
             </div>
           </>}
         </div>

@@ -1,4 +1,5 @@
 .favorites-page-container{
     margin-top: 65px;
     background-color: #f2f2f2;
+    height: calc(100vh - 65px);
 }
