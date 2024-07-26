@@ -2,15 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getProductById, saveProduct, createProduct, deleteProduct } from '../../services/fetchProducts.service';
-import { ProductData } from '../../models/productData.model';
 import { Container, Form, Button } from 'react-bootstrap';
 import { FaChevronLeft } from 'react-icons/fa';
 import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import './EditProductPage.css';
 import { FaDeleteLeft } from 'react-icons/fa6';
 import ConfirmationModalComponent from '../../components/ConfirmationModalComponent/ConfirmationModalComponent';
 import { NewProduct } from '../../models/newProduct';
+import './EditProductPage.css';
 
 const validationSchema = Yup.object({
     make: Yup.string().required('La marca es requerida'),
@@ -220,7 +219,7 @@ export const EditProductPage: React.FC = () => {
                     show={showModal}
                     onHide={() => setShowModal(false)}
                     onConfirm={handleConfirmDelete}
-                    productMake={initialValues.make} // o usa el nombre del producto si está disponible
+                    productMake={initialValues.make}
                 />
           )}
       </Container>

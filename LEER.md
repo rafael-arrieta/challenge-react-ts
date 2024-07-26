@@ -48,8 +48,10 @@ debe almacenarse en Firestore, donde el usuario tenga la posibilidad de:
     • Biblioteca UI: Material-UI (MUI) o React Bootstrap para la interfaz de usuario
     • Estilo: CSS (opcional, también puedes usar MUI SX, SASS)
 
-* En el flujo la aplicacion trae los productos desde Firebase 
-* hace un login sinó no permite al usuario ejecutar ciertas acciones
+* En el flujo la aplicacion trae los productos desde Firebase descartando los que estén en borrado logico
+* Hay un panel de filtrado que los disponibiliza según los productos en existencia
+* Poseé un login implemntando Firebase Auth, sinó no permite al usuario ejecutar ciertas acciones.
+* Implementa React-Bootstrap, Yup para validaciones y formik
 * en el login se encuentra un button para loguearse como Admin o Usuario final
 * Admin puede acceder al panel de control a editar el producto, crear uno nuevo o hacer un borrado lógico
 * El usuario final puede acceder a la pagina para ver sus favoritos, allí puede ver todos o eliminarlo
