@@ -9,6 +9,7 @@ import ControlPanelPage from './pages/ControlPanel/ControlPanelPage';
 import { LoginProvider } from './services/LoginContext';
 import { EditProductPage } from './pages/EditProduct/EditProductPage';
 import ControlPanelComponent from './components/ControlPanel/ControlPanelComponent';
+import ChatPage from './pages/ChatPage/ChatPage';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
             <Route path="/product/:id" element={<ProductDetailPage/>} />
             <Route path="/favorites" element={<FavoritesPage/>} />
             <Route path="/login" element={<LoginPage/>} />
+            <Route path="/messages/:id" element={<ChatPage/>} />
             <Route path="/control-panel" element={<ControlPanelPage/>}>
               <Route path="" element={<ControlPanelComponent/>} />
               <Route path="edit-product/:id" element={<EditProductPage/>} />

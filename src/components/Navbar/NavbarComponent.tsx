@@ -31,13 +31,17 @@ const NavbarComponent = () => {
           
           {userData?.isAdmin ?
             <NavLink to="/control-panel" className="nav-link" onClick={toggleSidenav}>Panel de control</NavLink> :
-            <NavLink to={userData.id ? '/favorites' : '/login'} className="nav-link" onClick={toggleSidenav}>Mis Favoritos</NavLink>
+            <>
+              <NavLink to={userData.id ? '/favorites' : '/login'} className="nav-link" onClick={toggleSidenav}>Mis Favoritos</NavLink>
+              <NavLink to={userData.id ? '/messages' : '/login'} className="nav-link" onClick={toggleSidenav}>Mensajes</NavLink>
+            </>
           }
+
           { !userData.id ? 
             <NavLink to="/login" className="nav-link" onClick={toggleSidenav}>
               Login
             </NavLink>:
-            <p onClick={handleLogout} className="nav-link" style={{paddingTop: '16px', cursor: 'pointer'}}>Cerrar Sesion</p>
+            <p onClick={handleLogout} className="nav-link-logout">Cerrar Sesion</p>
           }
         </div>
     </nav>

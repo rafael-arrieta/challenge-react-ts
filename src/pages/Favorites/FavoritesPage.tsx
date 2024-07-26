@@ -39,6 +39,8 @@ export const FavoritesPage = () => {
     fetchFavorites();
   }, [userData.id]);
 
+  
+
   return (
     <div className="favorites-page-container">
       <h1>Favoritos</h1>

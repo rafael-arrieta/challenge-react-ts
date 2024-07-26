@@ -53,17 +53,17 @@ nav{
   right: 0;
 }
 
-.nav-link {
+.nav-link, .nav-link-logout {
   color: white;
   text-decoration: none;
-  padding: 1rem;
   width: 100%;
   text-align: center;
   transition: background-color 0.3s;
 }
 
-.nav-link:hover {
+.nav-link:hover, .nav-link-logout:hover{
   background-color: #555;
+
 }
 
 @media (min-width: 800px) {
@@ -83,16 +83,22 @@ nav{
     gap: 3em;
     align-items: center;
     height: 40px;
-    width: 430px;
+    width: 530px;
     background-color: transparent;
     padding-top: 0;
     margin-top: 0;
   }
 
-  .nav-link {
+  .nav-link, .nav-link-logout {
     padding: 0.5rem 1rem;
     width: auto;
     text-align: left;
+  }
+
+  .nav-link-logout{
+    padding: 0;
+
+    margin: 0;
   }
 
   .nav-link:hover{
