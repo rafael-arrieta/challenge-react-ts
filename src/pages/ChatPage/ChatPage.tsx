@@ -10,6 +10,9 @@ import { getProductById } from "../../services/fetchProducts.service";
 
 const ChatPage = () => {
     const { id } = useParams<{ id: string }>();
+
+    const [chatId , setChatId] = useState<string>(id || '');
+
     const { getUserData } = useLoginContext();
     const userData = getUserData();
 
@@ -17,35 +20,35 @@ const ChatPage = () => {
     const [currentChat, setCurrentChat] = useState<Message>({} as Message);
     const [inputText, setInputText] = useState<string>('');
 
+    
+
     useEffect(() => {
-        /* TODO: 
-            Traer chats del usuario
-            Si hay un id, traer o crear el char por la unidad
-            
-        */
-        if(userData.isAdmin){
-            fetchMessageCollectionData().then(chats => {
-                if(!chats) return;
-                setChats(chats);
-                const current = chats.find(chat => chat.productId === id);
-                
-                if (current) {
-                    setCurrentChat(current);
-                }else{
-                    setCurrentChat({} as Message);
+        handleData();
+    }, [])
+
+    const handleData = () => {
+        if( userData.isAdmin){
+            fetchMessageCollectionData().then(chats => { 
+                console.log(chats);
+                if(chats){
+                    setChats(chats);
+                    const current = chats[0]
+                    if (current) {
+                        setCurrentChat(current);
+                        setChatId(current.productId)
+                    }
                 }
             })
-
         }else{
             fetchMessagesByUserId(userData.id).then(chats => {
                 setChats(chats);
                 const current = chats.find(chat => chat.productId === id);
                 if (current) {
-                    console.log(current);
-                    
+                    setChatId(current.productId);
                     setCurrentChat(current);
                 }else{
-                    setCurrentChat({} as Message);
+                    setCurrentChat(chats[0]);
+                    setChatId(chats[0].productId);
 
                     id && getProductById(id).then(product => {
                         product && 
@@ -54,7 +57,7 @@ const ChatPage = () => {
                 }
                 });
         }
-    }, [])
+    }
 
     const sendMassage = async () => {
         try{
@@ -65,23 +68,25 @@ const ChatPage = () => {
                     userName: userData.name,
                     text: inputText,
                     date: new Date(),
-                    isResponse: 'user'
+                    isResponse: userData.isAdmin ? 'operator':'user'
                 }];
-                if(id){
+                if(chatId){
+                    console.log(chatId);
+                    
                     const chat:PartialMessage = {
                         userId : userData.id,
-                        productId: id,
+                        productId: chatId,
                         messages: messages,
                         readed: false
                     }
 
-                await updateMessage(chat, currentChat.id);
+                    await updateMessage(chat, currentChat.id);
                 }
             }else{
-                if(id){
+                if(chatId){
                     const newChat:PartialMessage = {
                         userId : userData.id,
-                        productId: id,
+                        productId: chatId,
                         messages: [
                             {
                                 userName: userData.name,
@@ -93,10 +98,10 @@ const ChatPage = () => {
                         readed: false
                     }
                     await createMessage(newChat);
-
                 }
             }
             setInputText('');
+            handleData();
         }catch(error){
             console.error(error);
         }
@@ -105,19 +110,19 @@ const ChatPage = () => {
   return (
     <div className="chat-page-container">
         <div className="chat-list-sidenav">
-            {chats.map((chat, index) => (
-                <li key={index} onClick={() => setCurrentChat(chat)}>{chat.productId}</li>
+            {chats.map((chat) => (
+                <li key={chat.id} onClick={() => setCurrentChat(chat)}>{chat.productId}</li>
                 ))
             }
         </div>
         <div className="chat-container">
                 <div className="chat-messages">
-                    {currentChat.id && currentChat.messages.map((message, index) => (
+                    { currentChat.id ? currentChat.messages.map((message, index) => (
                         <div key={index} className="message">
                             <strong>{message.isResponse}: {message.userName}</strong>
                             <p>{message.text}</p>
                         </div>
-                    ))}
+                    )): null}
                 </div>
 
                 

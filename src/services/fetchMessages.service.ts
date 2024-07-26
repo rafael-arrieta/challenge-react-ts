@@ -24,11 +24,11 @@ export const fetchMessagesByUserId = async (userId: string): Promise<Message[]> 
 };
 
 export const fetchMessageCollectionData = async () => {
-    const MessageCollectionRef = collection(firestore, "productos");
+    const MessageCollectionRef = collection(firestore, "messages");
 
     try {
-        const q = query(MessageCollectionRef, where("onDestroy", "==", false));
-        const querySnapshot = await getDocs(q);
+        
+        const querySnapshot = await getDocs(MessageCollectionRef);
         const data: Message[] = [];
 
         querySnapshot.forEach((doc: any) => {
